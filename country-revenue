@@ -1,0 +1,6 @@
+--Which countries have the highest sales revenue?
+
+SELECT BillingCountry, SUM(Total) AS 'Total Revenue'
+FROM invoices
+GROUP BY BillingCountry
+ORDER BY 2 DESC;
