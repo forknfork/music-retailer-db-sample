@@ -1,0 +1,11 @@
+--Which genre generated the most revenue?
+
+SELECT genres.name, ROUND(SUM(invoice_items.UnitPrice),2) as 'Total Revenue'
+FROM tracks
+JOIN invoice_items
+	ON tracks.TrackId = invoice_items.TrackId
+	JOIN genres
+		ON tracks.GenreID = genres.GenreId
+GROUP BY genres.GenreID
+ORDER BY 2 DESC
+LIMIT 10;
