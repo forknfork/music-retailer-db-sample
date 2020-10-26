@@ -1,0 +1,7 @@
+SELECT tracks.Name, SUM(invoice_items.UnitPrice) as 'Total Revenue'
+FROM tracks
+JOIN invoice_items
+	ON tracks.TrackId = invoice_items.TrackId
+GROUP BY tracks.TrackId
+ORDER BY 2 DESC
+LIMIT 10;
