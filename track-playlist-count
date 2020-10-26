@@ -1,0 +1,9 @@
+--Which tracks appeared in the most playlists?
+
+SELECT tracks.name, COUNT(PlaylistId) as '# of Playlists'
+FROM tracks
+JOIN playlist_track
+	ON tracks.TrackID = playlist_track.TrackId
+GROUP BY tracks.name
+ORDER BY 2 DESC
+LIMIT 40;
