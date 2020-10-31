@@ -48,3 +48,18 @@ SELECT BillingCountry, SUM(Total) AS 'Total Revenue'
 FROM invoices
 GROUP BY BillingCountry
 ORDER BY 2 DESC;
+
+--How many customers did each employee support, what is the average revenue for each sale, and what is their total sale?
+
+SELECT employees.EmployeeId, 
+	employees.FirstName, 
+	employees.LastName, 
+	COUNT(DISTINCT customers.CustomerId) AS 'Customers Helped', 
+	ROUND(SUM(invoices.Total),2) AS 'Total Support Revenue', 
+	ROUND(AVG(invoices.Total),2) AS 'Average Support Revenue'
+FROM employees 
+	LEFT JOIN customers 
+		ON employees.EmployeeID = customers.SupportRepId
+		LEFT JOIN invoices 
+			ON invoices.CustomerId = customers.CustomerId
+GROUP BY EmployeeID;
