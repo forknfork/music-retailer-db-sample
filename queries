@@ -42,13 +42,6 @@ GROUP BY genres.GenreID
 ORDER BY 2 DESC
 LIMIT 10;
 
---Which countries have the highest sales revenue?
-
-SELECT BillingCountry, SUM(Total) AS 'Total Revenue'
-FROM invoices
-GROUP BY BillingCountry
-ORDER BY 2 DESC;
-
 --How many customers did each employee support, what is the average revenue for each sale, and what is their total sale?
 
 SELECT employees.EmployeeId, 
@@ -63,3 +56,17 @@ FROM employees
 		LEFT JOIN invoices 
 			ON invoices.CustomerId = customers.CustomerId
 GROUP BY EmployeeID;
+
+---Do longer or shorter length albums tend to generate more revenue?
+
+SELECT albums.AlbumId,
+	albums.Title,
+	artists.Name,
+	sum(tracks.Milliseconds)/1000 as 'Seconds',
+	sum(invoice_items.UnitPrice * invoice_items.Quantity) as 'Revenue'
+FROM albums 
+	LEFT JOIN artists ON albums.ArtistId = artists.ArtistId
+	JOIN tracks ON albums.AlbumId = tracks.AlbumId
+	JOIN invoice_items ON invoice_items.TrackId = tracks.TrackId
+GROUP BY albums.AlbumId
+ORDER BY Seconds DESC;
