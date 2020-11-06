@@ -71,3 +71,19 @@ FROM albums
 	JOIN invoice_items ON invoice_items.TrackId = tracks.TrackId
 GROUP BY albums.AlbumId
 ORDER BY Seconds DESC;
+
+-- Is the number of times a track appear in any playlist a good indicator of sales?
+
+SELECT 
+	tracks.TrackId,
+	tracks.Name AS 'Track',
+	artists.Name AS 'Artist',
+	count(DISTINCT playlist_track.PlaylistId) AS 'Playlists',
+	sum(invoice_items.quantity) AS 'Units Sold'
+FROM tracks
+	JOIN albums ON tracks.AlbumID = albums.AlbumId
+		JOIN artists ON albums.ArtistId = artists.ArtistId
+			JOIN invoice_items ON invoice_items.TrackId = tracks.TrackId
+				JOIN playlist_track ON playlist_track.TrackId = tracks.TrackId
+GROUP BY tracks.TrackId
+ORDER BY 5 DESC;
