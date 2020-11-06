@@ -62,8 +62,9 @@ GROUP BY EmployeeID;
 SELECT albums.AlbumId,
 	albums.Title,
 	artists.Name,
-	sum(tracks.Milliseconds)/1000 as 'Seconds',
-	sum(invoice_items.UnitPrice * invoice_items.Quantity) as 'Revenue'
+	sum(tracks.Milliseconds)/1000 AS 'Seconds',
+	sum(invoice_items.UnitPrice * invoice_items.Quantity) AS 'Revenue',
+	round(sum(invoice_items.UnitPrice * invoice_items.Quantity) / (sum(tracks.Milliseconds)/1000), 5) AS '$/Sec'
 FROM albums 
 	LEFT JOIN artists ON albums.ArtistId = artists.ArtistId
 	JOIN tracks ON albums.AlbumId = tracks.AlbumId
