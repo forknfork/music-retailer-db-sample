@@ -87,3 +87,26 @@ FROM tracks
 				JOIN playlist_track ON playlist_track.TrackId = tracks.TrackId
 GROUP BY tracks.TrackId
 ORDER BY 5 DESC;
+
+-- How much revenue is generated each year, and what is its percent change from the previous year? 
+WITH past AS (
+	SELECT 
+		strftime('%Y',invoices.InvoiceDate) + 1 AS previous_year,
+		SUM(invoices.Total) AS previous_sales
+	FROM invoices
+	GROUP BY previous_year
+),
+later AS (
+	SELECT 
+		strftime('%Y',invoices.InvoiceDate) AS recent_year,
+		SUM(invoices.Total) AS recent_sales
+	FROM invoices
+	GROUP BY recent_year
+)
+SELECT 
+	recent_year AS 'Year',
+	recent_sales AS 'Total Sales',
+	ROUND((((recent_sales - previous_sales) / previous_sales) * 100),2) AS 'Percentage Change'
+FROM past
+JOIN later ON CAST(previous_year AS int) = CAST(recent_year AS int)
+GROUP BY 1;
